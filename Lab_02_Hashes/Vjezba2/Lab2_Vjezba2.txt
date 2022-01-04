@@ -1,0 +1,15 @@
+Vježba 2
+Cilj ove vježbe je pokazati kako dvije datoteke kreirane u na različitim uređajima imaju iste hash otiske ukoliko je njihov sadržaj identičan. Također ćemo pokazati iako je sadržaj datoteke identičan (razlikuje se po kapitalizaciji) hash otisak će u tom slučaju biti isti.
+
+U dokument upišite vrijednost test te sačuvajte datoteku pod nazivom test.txt
+Kreirajte novi dokument te u njega upišite vrijednost Test te ga sačuvajte pod nazivom test1.txt
+
+--Test.txt--
+MD5: 098f6bcd4621d373cade4e832627b4f6
+SHA1: a94a8fe5ccb19ba61c4c0873d391e987982fbbd3
+SHA256: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+
+--Test1.txt--
+MD5: 0cbc6611f5540bd0809a388dc95a615b
+SHA1: 640ab2bae07bedc4c163f679a746f7ab7fb5d1fa
+SHA256: 532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25

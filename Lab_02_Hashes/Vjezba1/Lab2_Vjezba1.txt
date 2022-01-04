@@ -1,0 +1,21 @@
+Vježba 1
+
+Cilj ove vježbe je razumijeti da datoteke imaju jedinstvena zaglavlja na osnovu tipa datoteke. Pokazat ćemo kako datoteke ne trebaju imati ekstenziju za koje se trenutno prikazuju. Veoma bitno je kod računalne forenzike detektirati datateke koje imaju promijenjenu ekstenziju, jer one mogu ukazivati na potencijalno skrivanje informacije. Ekstenziju datoteke možemo saznati na tri načina:
+
+1)upotrebom python-magic biblioteke:
+
+	brew install libmagic
+	python3
+
+>>> import magic
+>>> magic.from_file("testdata/test.pdf")
+'PDF document, version 1.2'
+# recommend using at least the first 2048 bytes, as less can produce incorrect identification
+>>> magic.from_buffer(open("testdata/test.pdf", "rb").read(2048))
+'PDF document, version 1.2'
+
+2)Winhex programom
+
+http://www.winhex.com/winhex/hex-editor.html
+
+3)skriptom vjezba1

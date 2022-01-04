@@ -1,0 +1,49 @@
+RF - Lab 1: BitLocker i dekripcija diska
+
+ZADATAK #1: Pretpostavite da ste dobili na analizu USB memoriju čiji je sadržaj enkriptiran korištenjem BitLockera. Nakon što ste napravili sigurnosnu kopiju USB memorije, vaš zadatak je saznati lozinku kojom je enkriptiran disk/USB.
+
+ZADATAK #2: Nakon što saznate lozinku i dekriptirate disk, student treba izvući datoteku koja pripada njemu.
+
+
+ZADATAK 1 (rjesenje): 
+Probijanje lozinke se sastoji od dva dijela: 
+1)izvlačenje hash sadržaja iz sigurnosne kopije UBS-a koji je zaštićen lozinkom 
+2)te stvarnog napada.
+
+1)Izvlačenje hash vrijednosti - John the Ripper
+
+	bitlocker2john -i imageEncrypted
+	Opening file /path/to/imageEncrypted
+
+gdje je imageEncrypted sigurnosna kopija USB memorije te spremimo
+
+$bitlocker$1$16$a149a1c91be871e9783f51b59fd9db88$1048576$12$b0adb333606cd30103000000$60$c1633c8f7eb721ff42e3c29c3daea6da0189198af15161975f8d00b8933681d93edc7e63f36b917cdb73285f889b9bb37462a40c1f8c7857eddf2f0e
+
+u hash.txt
+
+2.1)Probijanje lozinke - Hashcat
+
+	hashcat -m 22100 -a 3 hash.txt "xyz?d?d?d?d?d"
+
+
+pri čemu -m 22100 predstavlja hash mode za BitLocker, xyz predstavlja HINT kojeg ćete dobiti od profesora, a ?d?d?d?d?d je niz od 5 brojeva koji hashcat mora pogoditi bruteforce napadom.
+
+Podizanje slike kopije diska korištenjem Arsenal Image Mounter alata
+Na računalo sačuvajte Arsenal Image Mounter s kojom ćemo podigniti sigurnosnu kopiju USB-a u Read-only modu. Kada stisnete tipku Mount Image, pronađite sigurnosnu kopiju diska, označite Read only te Create "removable" disk device. Nakon toga bi se trebao pokazati BitLocker prozor upozorenja za unos lozinke. Kada unesete lozinku trebao bi se pojaviti sadržaj USB memorije.
+
+Nakon što ste dekriptirali sigurnosnu kopiju, naći ćete niz datoteka čije je ime generirano primjenom kriptografske hash funkcije SHA-256 prikazano u nastavku:
+
+	hash("PrezimeIme" + "SALT") = f3f496e59923ea2f120edbe0b603fac4719bb01e250e9534e401af6f1edb0a5e
+
+Ime vlastite datoteke možete saznati izvršavanjem sljedećeg koda u python shell-u:
+
+>>> from cryptography.hazmat.primitives import hashes
+>>> from cryptography.hazmat.backends import default_backend
+>>> imeStudenta = "PrezimeIme" + "SALT" # NAPOMENA: SALT je BitLocker lozinka
+>>> digest = hashes.Hash(hashes.SHA256(), backend=default_backend())
+>>> digest.update(str.encode(imeStudenta))
+>>> filename = digest.finalize().hex()
+
+2.2)Probijanje lozinke - Cloudopolis
+
+https://github.com/JoelGMSec/Cloudtopolis
